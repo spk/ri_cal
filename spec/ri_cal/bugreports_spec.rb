@@ -229,40 +229,41 @@ ENDVENUE
   end
 end
 
-context "ticket #23" do
-  describe "RecurrenceRule" do
-    it "should convert the rrule string to a hash" do
-      rrule = RiCal::PropertyValue::RecurrenceRule.convert(nil, 'INTERVAL=2;FREQ=WEEKLY;BYDAY=TH,TU')
-      rrule.to_options_hash.should == {:freq => 'WEEKLY', :byday => %w{TH TU}, :interval => 2}
+describe 'ticket' do
+  context "ticket #23" do
+    describe "RecurrenceRule" do
+      it "should convert the rrule string to a hash" do
+        rrule = RiCal::PropertyValue::RecurrenceRule.convert(nil, 'INTERVAL=2;FREQ=WEEKLY;BYDAY=TH,TU')
+        rrule.to_options_hash.should == {:freq => 'WEEKLY', :byday => %w{TH TU}, :interval => 2}
+      end
     end
   end
-end
 
-context "ticket #26" do
-  context "Date property" do
-    it "should handle for_parent" do
-      lambda {
-      RiCal::PropertyValue::Date.convert(:foo, Date.parse("20090927")).for_parent(:bar)}.should_not raise_error
+  context "ticket #26" do
+    context "Date property" do
+      it "should handle for_parent" do
+        lambda {
+          RiCal::PropertyValue::Date.convert(:foo, Date.parse("20090927")).for_parent(:bar)}.should_not raise_error
+      end
     end
   end
-end
 
-context "ticket 29:supress-x-rical-tzsource-when-not-relevant" do
-  it "should parse its own output" do
-    cal_string = %Q(BEGIN:VCALENDAR
+  context "ticket 29:supress-x-rical-tzsource-when-not-relevant" do
+    it "should parse its own output" do
+      cal_string = %Q(BEGIN:VCALENDAR
 PRODID:-//Google Inc//Google Calendar 70.9054//EN
 BEGIN:VEVENT
 DTSTART:20100610T100000
 DTEND:20100610T110000
 END:VEVENT
 END:VCALENDAR)
-    lambda {RiCal.parse_string(RiCal.parse_string(cal_string).first.to_s)}.should_not raise_error
+      lambda {RiCal.parse_string(RiCal.parse_string(cal_string).first.to_s)}.should_not raise_error
+    end
   end
-end
 
-context "X-properties" do
-  it "should round-trip the X-WR-CALNAME property" do
-    cal_string = %Q(BEGIN:VCALENDAR
+  context "X-properties" do
+    it "should round-trip the X-WR-CALNAME property" do
+      cal_string = %Q(BEGIN:VCALENDAR
 PRODID:-//Markthisdate.com\,0.7
 VERSION:2.0
 CALSCALE:GREGORIAN
@@ -272,5 +273,7 @@ END:VCALENDAR)
       cal = RiCal.parse_string(cal_string).first
       cal.x_wr_calname.first.should == " AFC Ajax Eredivisie wedstrijden 2010 - 2011"
     end
+  end
+
 end
 
